@@ -9,7 +9,7 @@ from torchvision.transforms import v2
 from torchvision.utils import make_grid, save_image
 from einops import rearrange
 
-from src.utils.train_util import instantiate_from_config
+from InstantMesh.src.utils.train_util import instantiate_from_config
 from diffusers import DiffusionPipeline, EulerAncestralDiscreteScheduler, DDPMScheduler, UNet2DConditionModel
 from .pipeline import RefOnlyNoisedUNet
 

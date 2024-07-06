@@ -9,7 +9,7 @@ from torch.utils.data.distributed import DistributedSampler
 from PIL import Image
 from pathlib import Path
 
-from src.utils.train_util import instantiate_from_config
+from InstantMesh.src.utils.train_util import instantiate_from_config
 
 
 class DataModuleFromConfig(pl.LightningDataModule):

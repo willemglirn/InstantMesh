@@ -70,7 +70,11 @@ class NeuralRender(Renderer):
     def __init__(self, device='cuda', camera_model=None):
         super(NeuralRender, self).__init__()
         self.device = device
-        self.ctx = dr.RasterizeCudaContext(device=device)
+        print('The torch neural render device is: ' + str(device))
+        if str(device) == 'cpu':
+            self.ctx = dr.RasterizeGLContext()
+        else:
+            self.ctx = dr.RasterizeCudaContext(device=device)
         self.projection_mtx = None
         self.camera = camera_model
 

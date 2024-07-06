@@ -18,8 +18,8 @@ from torch.utils.data import DataLoader
 from torch.utils.data.distributed import DistributedSampler
 from torchvision import transforms
 
-from src.utils.train_util import instantiate_from_config
-from src.utils.camera_util import (
+from InstantMesh.src.utils.train_util import instantiate_from_config
+from InstantMesh.src.utils.camera_util import (
     FOV_to_intrinsics, 
     center_looking_at_camera_pose, 
     get_circular_camera_poses,

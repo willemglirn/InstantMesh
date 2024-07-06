@@ -169,6 +169,7 @@ class InstantNeRF(nn.Module):
         '''
         assert planes.shape[0] == 1
         device = planes.device
+        print('The torch lrm device is: ' + str(device))
 
         grid_out = self.synthesizer.forward_grid(
             planes=planes,
@@ -194,7 +195,10 @@ class InstantNeRF(nn.Module):
         vertices = torch.tensor(vertices, dtype=torch.float32, device=device)
         faces = torch.tensor(faces.astype(int), dtype=torch.long, device=device)
 
-        ctx = dr.RasterizeCudaContext(device=device)
+        if str(device) == 'cpu':
+            ctx = dr.RasterizeGLContext()
+        else:
+            ctx = dr.RasterizeCudaContext(device=device)
         uvs, mesh_tex_idx, gb_pos, tex_hard_mask = xatlas_uvmap(
             ctx, vertices, faces, resolution=texture_resolution)
         tex_hard_mask = tex_hard_mask.float()
@@ -206,4 +210,4 @@ class InstantNeRF(nn.Module):
         img_feat = torch.lerp(background_feature, tex_feat, tex_hard_mask)
         texture_map = img_feat.permute(0, 3, 1, 2).squeeze(0)
 
-        return vertices, faces, uvs, mesh_tex_idx, texture_map
+        return vertices, faces, uvs, mesh_tex_idx, texture_map()

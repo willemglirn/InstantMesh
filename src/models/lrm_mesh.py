@@ -352,6 +352,7 @@ class InstantMesh(nn.Module):
         '''
         assert planes.shape[0] == 1
         device = planes.device
+        print('The torch device lrm_mesh is: ' + str(device))
 
         # predict geometry first
         mesh_v, mesh_f, sdf, deformation, v_deformed, sdf_reg_loss = self.get_geometry_prediction(planes)
@@ -367,7 +368,10 @@ class InstantMesh(nn.Module):
             return vertices.cpu().numpy(), faces.cpu().numpy(), vertices_colors
 
         # use x-atlas to get uv mapping for the mesh
-        ctx = dr.RasterizeCudaContext(device=device)
+        if str(device) == 'cpu':
+            ctx = dr.RasterizeGLContext()
+        else:
+            ctx = dr.RasterizeCudaContext(device=device)
         uvs, mesh_tex_idx, gb_pos, tex_hard_mask = xatlas_uvmap(
             self.geometry.renderer.ctx, vertices, faces, resolution=texture_resolution)
         tex_hard_mask = tex_hard_mask.float()
